@@ -1,5 +1,36 @@
 with
 
+source as (
+
+    select * from {{ source('jaffle_shop', 'customers') }}
+
+),
+
+transformed as (
+
+    select 
+
+        id as customer_id,
+        last_name as surname,
+        first_name as givenname,
+        first_name || ' ' || last_name as full_name
+
+    from source
+
+)
+
+select * from transformed
+
+
+
+
+
+
+
+
+
+
+
 -- Import CTEs
 customers as (
 
@@ -112,7 +143,6 @@ customer_order_history as (
     left outer join payments as c
     on a.id = c.orderid
 
-    where a.status not in ('pending') and c.status != 'fail'
 
     group by b.id, b.name, b.last_name, b.first_name
 
